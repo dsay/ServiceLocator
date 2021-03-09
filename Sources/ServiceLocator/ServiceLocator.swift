@@ -1,22 +1,22 @@
 import Foundation
 
-class ServiceLocator {
+open class ServiceLocator {
 
-    static let shared = ServiceLocator()
+    static public let shared = ServiceLocator()
 
     private var registry: [ServiceKey: Any] = [:]
 
-    func register<T>(service: @escaping (ServiceLocator) -> T, name: String? = nil) {
+    public func register<T>(service: @escaping (ServiceLocator) -> T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
         registry[key] = service
     }
 
-    func register<T>(service: T, name: String? = nil) {
+    public func register<T>(service: T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
         registry[key] = service
     }
 
-    func tryGetService<T>(name: String? = nil) -> T? {
+    public func tryGetService<T>(name: String? = nil) -> T? {
         let key = ServiceKey(serviceType: T.self, name: name)
         if let service = registry[key] as? T {
             return service
@@ -27,7 +27,7 @@ class ServiceLocator {
         }
     }
     
-    func getService<T>(name: String? = nil) -> T {
+    public func getService<T>(name: String? = nil) -> T {
         if let service: T = tryGetService(name: name) {
             return service
         } else {
@@ -35,7 +35,7 @@ class ServiceLocator {
         }
     }
 
-    func unregister<T>(service: T, name: String? = nil) {
+    public func unregister<T>(service: T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
         registry.removeValue(forKey: key)
     }
@@ -61,9 +61,13 @@ extension ServiceKey: Hashable {
 }
 
 @propertyWrapper
-struct Injection<T> {
+public struct Injection<T> {
 
-    var wrappedValue: T {
+    public init() {
+        
+    }
+    
+    public var wrappedValue: T {
         get {
             return ServiceLocator.shared.getService()
         }
