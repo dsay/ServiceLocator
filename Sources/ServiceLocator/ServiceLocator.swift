@@ -60,19 +60,19 @@ extension ServiceKey: Hashable {
     }
 }
 
-@propertyWrapper
-public struct Injection<T> {
-
-    public init() {
-    
-    }
-    
-    public var wrappedValue: T {
-        get {
-            return ServiceLocator.shared.getService()
-        }
-        set {
-            ServiceLocator.shared.register(service: newValue)
-        }
-    }
-}
+//@propertyWrapper
+//public struct Injection<T> {
+//
+//    public init() {
+//    
+//    }
+//    
+//    public var wrappedValue: T {
+//        get {
+//            return ServiceLocator.shared.getService()
+//        }
+//        set {
+//            ServiceLocator.shared.register(service: newValue)
+//        }
+//    }
+//}
