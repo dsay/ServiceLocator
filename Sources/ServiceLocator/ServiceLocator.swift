@@ -1,12 +1,12 @@
 import Foundation
 
-open class Locator {
+open class ServiceLocator {
 
-    static public let shared = Locator()
+    static public let shared = ServiceLocator()
 
     private var registry: [ServiceKey: Any] = [:]
 
-    public func register<T>(service: @escaping (Locator) -> T, name: String? = nil) {
+    public func register<T>(service: @escaping (ServiceLocator) -> T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
         registry[key] = service
     }
@@ -20,7 +20,7 @@ open class Locator {
         let key = ServiceKey(serviceType: T.self, name: name)
         if let service = registry[key] as? T {
             return service
-        } else if let service = registry[key] as? (Locator) -> T {
+        } else if let service = registry[key] as? (ServiceLocator) -> T {
             return service(self)
         } else {
             return nil
@@ -60,19 +60,19 @@ extension ServiceKey: Hashable {
     }
 }
 
-//@propertyWrapper
-//public struct Injection<T> {
-//
-//    public init() {
-//    
-//    }
-//    
-//    public var wrappedValue: T {
-//        get {
-//            return ServiceLocator.shared.getService()
-//        }
-//        set {
-//            ServiceLocator.shared.register(service: newValue)
-//        }
-//    }
-//}
+@propertyWrapper
+public struct Injection<T> {
+
+    public init() {
+    
+    }
+    
+    public var wrappedValue: T {
+        get {
+            return ServiceLocator.shared.getService()
+        }
+        set {
+            ServiceLocator.shared.register(service: newValue)
+        }
+    }
+}
