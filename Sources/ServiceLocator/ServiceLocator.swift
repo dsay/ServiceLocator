@@ -61,11 +61,13 @@ extension ServiceKey: Hashable {
 }
 
 @propertyWrapper
-final public class Injection<T> {
+public struct Injection<T> {
 
-    public init() {
-        
-    }
+    var value: T
+    
+    public init(wrappedValue: T) {
+        value = wrappedValue
+      }
     
     public var wrappedValue: T {
         get {
