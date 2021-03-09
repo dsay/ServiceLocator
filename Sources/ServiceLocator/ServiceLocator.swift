@@ -1,12 +1,12 @@
 import Foundation
 
-open class ServiceLocator {
+open class Locator {
 
-    static public let shared = ServiceLocator()
+    static public let shared = Locator()
 
     private var registry: [ServiceKey: Any] = [:]
 
-    public func register<T>(service: @escaping (ServiceLocator) -> T, name: String? = nil) {
+    public func register<T>(service: @escaping (Locator) -> T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
         registry[key] = service
     }
@@ -20,7 +20,7 @@ open class ServiceLocator {
         let key = ServiceKey(serviceType: T.self, name: name)
         if let service = registry[key] as? T {
             return service
-        } else if let service = registry[key] as? (ServiceLocator) -> T {
+        } else if let service = registry[key] as? (Locator) -> T {
             return service(self)
         } else {
             return nil
