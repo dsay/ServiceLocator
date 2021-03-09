@@ -61,7 +61,7 @@ extension ServiceKey: Hashable {
 }
 
 @propertyWrapper
-public struct Injection<T> {
+final public class Injection<T> {
 
     public init() {
         
