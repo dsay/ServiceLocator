@@ -63,11 +63,9 @@ extension ServiceKey: Hashable {
 @propertyWrapper
 public struct Injection<T> {
 
-    var value: T
+    public init() {
     
-    public init(wrappedValue: T) {
-        value = wrappedValue
-      }
+    }
     
     public var wrappedValue: T {
         get {
