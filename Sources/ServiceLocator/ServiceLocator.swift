@@ -8,21 +8,27 @@ open class ServiceLocator {
 
     public func register<T>(service: @escaping (ServiceLocator) -> T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
+        
         registry[key] = service
     }
 
     public func register<T>(service: T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
+        
         registry[key] = service
     }
 
     public func tryGetService<T>(name: String? = nil) -> T? {
         let key = ServiceKey(serviceType: T.self, name: name)
-        if let service = registry[key] as? T {
+
+        switch registry[key] {
+        case let service as T:
             return service
-        } else if let service = registry[key] as? (ServiceLocator) -> T {
+            
+        case let service as (ServiceLocator) -> T:
             return service(self)
-        } else {
+            
+        default:
             return nil
         }
     }
@@ -37,6 +43,7 @@ open class ServiceLocator {
 
     public func unregister<T>(service: T, name: String? = nil) {
         let key = ServiceKey(serviceType: T.self, name: name)
+        
         registry.removeValue(forKey: key)
     }
 }
